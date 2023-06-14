@@ -1,0 +1,11 @@
+.Content {
+  margin: 16px;
+}
+
+.Layout {
+  display: flex;
+  list-style: none;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+}
