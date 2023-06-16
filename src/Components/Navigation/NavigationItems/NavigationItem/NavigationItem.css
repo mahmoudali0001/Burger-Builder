@@ -5,16 +5,15 @@
   width: 100%;
 }
 
-.NavigationItem a {
-  text-decoration: none;
+.NavigationItem span {
   width: 100%;
   box-sizing: border-box;
   display: block;
 }
 
-.NavigationItem a:hover,
-.NavigationItem a:active,
-.NavigationItem a.active {
+.NavigationItem span:hover,
+.NavigationItem span:active,
+.NavigationItem span.active {
   color: #40a4c8;
 }
 
@@ -27,16 +26,16 @@
     align-items: center;
   }
 
-  .NavigationItem a {
+  .NavigationItem span {
     height: 100%;
     padding: 16px 10px;
     border-bottom: 4px solid transparent;
     transition: 0.5s linear;
   }
 
-  .NavigationItem a:hover,
-  .NavigationItem a:active,
-  .NavigationItem a.active {
+  .NavigationItem span:hover,
+  .NavigationItem span:active,
+  .NavigationItem span.active {
     background-color: #a9a9a9b8;
     border-bottom: 4px solid #40a4c8;
     color: white;
