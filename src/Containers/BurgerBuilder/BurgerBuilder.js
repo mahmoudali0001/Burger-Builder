@@ -122,7 +122,22 @@ class BurgerBuilder extends Component {
     // this.setState({ purchasing: false });
     // this.setState({ loading: true });
 
-    this.props.history.push("/checkout");
+    const queryParams = [];
+
+    for (let i in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) +
+          "=" +
+          encodeURIComponent(this.state.ingredients[i])
+      );
+    }
+
+    const queryStrings = queryParams.join("&");
+
+    this.props.history.push({
+      pathname: "/checkout",
+      search: "?" + queryStrings,
+    });
   };
 
   render() {
@@ -170,6 +185,8 @@ class BurgerBuilder extends Component {
     if (this.state.loading) {
       orderSummary = <Spinner />;
     }
+
+    console.log(this.state.ingredients);
 
     return (
       <Aux>
