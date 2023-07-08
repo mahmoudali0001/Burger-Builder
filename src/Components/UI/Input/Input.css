@@ -9,4 +9,12 @@
   width: 100%;
   box-sizing: border-box;
   resize: none;
+  padding: 4px;
+  font-size: 15px;
+  border: 1px solid #bfbfbf;
+  border-radius: 3px;
+}
+
+.Input label {
+  color: #366;
 }
