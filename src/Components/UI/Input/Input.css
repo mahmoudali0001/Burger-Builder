@@ -5,7 +5,8 @@
 }
 
 .Input input,
-.Input textarea {
+.Input textarea,
+.Input select {
   width: 100%;
   box-sizing: border-box;
   resize: none;

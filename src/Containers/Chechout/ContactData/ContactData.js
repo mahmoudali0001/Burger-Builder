@@ -38,8 +38,10 @@ class ContactData extends Component {
       deliveryMethod: {
         elementType: "select",
         elementConfig: {
-          options: [{ value: "fastest", displayValue: "Fastest" }],
-          options: [{ value: "cheapest", displayValue: "Cheapest" }],
+          options: [
+            { value: "fastest", displayValue: "Fastest" },
+            { value: "cheapest", displayValue: "Cheapest" },
+          ],
         },
         value: "october",
       },
@@ -81,6 +83,10 @@ class ContactData extends Component {
     this.setState({ loading: true });
   };
 
+  InputChangeHandler = (event) => {
+    console.log(event.target.value);
+  };
+
   render() {
     const formElementsArray = [];
 
@@ -94,6 +100,7 @@ class ContactData extends Component {
       <form>
         {formElementsArray.map((element) => (
           <Input
+            changed={this.InputChangeHandler}
             key={element.id}
             elementType={element.config.elementType}
             elementConfig={element.config.elementConfig}
