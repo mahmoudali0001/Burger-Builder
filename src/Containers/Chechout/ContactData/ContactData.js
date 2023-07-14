@@ -15,7 +15,7 @@ class ContactData extends Component {
           type: "text",
           placeholder: "Mahmoud Ali",
         },
-        value: "Mahmoud",
+        value: "",
       },
       email: {
         elementType: "input",
@@ -23,7 +23,7 @@ class ContactData extends Component {
           type: "email",
           placeholder: "example@mahmoud.com",
         },
-        value: "email",
+        value: "",
       },
       address: {
         elementType: "input",
@@ -31,7 +31,7 @@ class ContactData extends Component {
           type: "text",
           placeholder: "Cairo, EL Maadi",
         },
-        value: "address",
+        value: "",
         street: "",
         postalCode: "",
       },
@@ -43,7 +43,6 @@ class ContactData extends Component {
             { value: "cheapest", displayValue: "Cheapest" },
           ],
         },
-        value: "october",
       },
     },
 
@@ -83,8 +82,20 @@ class ContactData extends Component {
     this.setState({ loading: true });
   };
 
-  InputChangeHandler = (event) => {
-    console.log(event.target.value);
+  InputChangeHandler = (event, inputIdentifier) => {
+    const updatedOrderForm = {
+      ...this.state.orderForm,
+    };
+
+    const updatedFormElement = {
+      ...updatedOrderForm[inputIdentifier],
+    };
+
+    updatedFormElement.value = event.target.value;
+    updatedOrderForm[inputIdentifier] = updatedFormElement;
+
+    this.setState({ orderForm: updatedOrderForm });
+    console.log(this.state.orderForm);
   };
 
   render() {
@@ -100,11 +111,11 @@ class ContactData extends Component {
       <form>
         {formElementsArray.map((element) => (
           <Input
-            changed={this.InputChangeHandler}
             key={element.id}
             elementType={element.config.elementType}
             elementConfig={element.config.elementConfig}
             value={element.config.value}
+            changed={(event) => this.InputChangeHandler(event, element.id)}
           />
         ))}
         <Button btnType="Success" clicked={this.orderHandler}>

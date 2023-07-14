@@ -8,28 +8,32 @@ const input = (props) => {
   switch (props.elementType) {
     case "input":
       inputElement = (
-        <input {...props.elementConfig} value="" onChange={props.changed} />
+        <input
+          {...props.elementConfig}
+          value={props.value}
+          onChange={props.changed}
+        />
       );
 
       break;
 
     case "textarea":
       inputElement = (
-        <textarea {...props.elementConfig} value="" onChange={props.changed} />
+        <textarea
+          {...props.elementConfig}
+          value={props.value}
+          onChange={props.changed}
+        />
       );
 
       break;
 
     case "select":
       inputElement = (
-        <select>
+        <select onChange={props.changed}>
           {props.elementConfig.options.map((option) => {
             return (
-              <option
-                key={option.displayValue}
-                onChange={props.changed}
-                value=""
-              >
+              <option key={option.displayValue} value={props.value}>
                 {option.displayValue}
               </option>
             );

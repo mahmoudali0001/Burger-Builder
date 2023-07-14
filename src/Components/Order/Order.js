@@ -20,7 +20,8 @@ const order = (props) => {
           textTransform: "capitalize",
           display: "inline-block",
           padding: "8px",
-          border: "1px solid #eee",
+          border: "1px solid #939292",
+          borderRadius: "10px",
         }}
         key={ig.name}
       >
