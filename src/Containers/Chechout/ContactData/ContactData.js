@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 import Button from "../../../Components/UI/Button/Button";
 import Spinner from "../../../Components/UI/Spinner/Spinner";
@@ -16,6 +17,11 @@ class ContactData extends Component {
           placeholder: "Mahmoud Ali",
         },
         value: "",
+        validation: {
+          required: true,
+          minLength: 3,
+        },
+        valid: false,
       },
       email: {
         elementType: "input",
@@ -24,6 +30,11 @@ class ContactData extends Component {
           placeholder: "example@mahmoud.com",
         },
         value: "",
+        validation: {
+          required: true,
+          minLength: 3,
+        },
+        valid: false,
       },
       address: {
         elementType: "input",
@@ -32,6 +43,11 @@ class ContactData extends Component {
           placeholder: "Cairo, EL Maadi",
         },
         value: "",
+        validation: {
+          required: true,
+          minLength: 3,
+        },
+        valid: false,
         street: "",
         postalCode: "",
       },
@@ -52,22 +68,18 @@ class ContactData extends Component {
 
   orderHandler = (event) => {
     event.preventDefault();
-    console.log(this.props.ingredients);
-    console.log(this.props);
+
+    const formData = {};
+
+    for (let formElementIdentifier in this.state.orderForm) {
+      formData[formElementIdentifier] =
+        this.state.orderForm[formElementIdentifier].value;
+    }
+
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.totalPrice,
-      customer: {
-        name: "Mahmoud ALi",
-        phoneNumber: "01114426697",
-        addreess: {
-          country: "Egypt",
-          city: "october",
-          zipCode: 112235,
-        },
-        email: "mahmoudAliFarag1@gmail.com",
-      },
-      deliveryMethod: "fastest",
+      orderData: formData,
     };
     axios
       .post("/orders.json", order)
@@ -80,6 +92,22 @@ class ContactData extends Component {
       });
     this.setState({ purchasing: false });
     this.setState({ loading: true });
+
+    this.props.match.path = "/";
+  };
+
+  checkValidity = (value, rules) => {
+    let isValid = false;
+
+    if (rules.required) {
+      isValid = value.trim() !== "";
+    }
+
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength;
+    }
+
+    return isValid;
   };
 
   InputChangeHandler = (event, inputIdentifier) => {
@@ -93,9 +121,14 @@ class ContactData extends Component {
 
     updatedFormElement.value = event.target.value;
     updatedOrderForm[inputIdentifier] = updatedFormElement;
+    updatedFormElement.valid = this.checkValidity(
+      updatedFormElement.value,
+      updatedFormElement.validation
+    );
 
+    console.log(updatedFormElement);
     this.setState({ orderForm: updatedOrderForm });
-    console.log(this.state.orderForm);
+    this;
   };
 
   render() {
@@ -108,7 +141,7 @@ class ContactData extends Component {
       });
     }
     let form = (
-      <form>
+      <form onSubmit={this.orderHandler}>
         {formElementsArray.map((element) => (
           <Input
             key={element.id}
@@ -118,9 +151,7 @@ class ContactData extends Component {
             changed={(event) => this.InputChangeHandler(event, element.id)}
           />
         ))}
-        <Button btnType="Success" clicked={this.orderHandler}>
-          ORDER
-        </Button>
+        <Button btnType="Success">ORDER</Button>
       </form>
     );
 
@@ -137,4 +168,4 @@ class ContactData extends Component {
   }
 }
 
-export default ContactData;
+export default withRouter(ContactData);
