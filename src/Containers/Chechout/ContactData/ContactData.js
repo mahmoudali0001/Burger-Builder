@@ -9,6 +9,7 @@ import Input from "../../../Components/UI/Input/Input";
 
 class ContactData extends Component {
   state = {
+    controls: [],
     orderForm: {
       name: {
         elementType: "input",
@@ -22,6 +23,7 @@ class ContactData extends Component {
           minLength: 3,
         },
         valid: false,
+        touched: false,
       },
       email: {
         elementType: "input",
@@ -35,6 +37,7 @@ class ContactData extends Component {
           minLength: 3,
         },
         valid: false,
+        touched: false,
       },
       address: {
         elementType: "input",
@@ -48,6 +51,7 @@ class ContactData extends Component {
           minLength: 3,
         },
         valid: false,
+        touched: false,
         street: "",
         postalCode: "",
       },
@@ -59,9 +63,11 @@ class ContactData extends Component {
             { value: "cheapest", displayValue: "Cheapest" },
           ],
         },
+        validation: {},
+        valid: true,
       },
     },
-
+    formIsValid: false,
     loading: false,
     purchasing: false,
   };
@@ -81,23 +87,30 @@ class ContactData extends Component {
       price: this.props.totalPrice,
       orderData: formData,
     };
-    axios
-      .post("/orders.json", order)
-      .then((res) => {
-        this.setState({ loading: false });
-        this.props.history.push("/");
-      })
-      .catch((error) => {
-        this.setState({ loading: false });
-      });
-    this.setState({ purchasing: false });
-    this.setState({ loading: true });
-
-    this.props.match.path = "/";
+    for (let key in this.state.orderForm) {
+      if (this.state.orderForm[key].valid) {
+        axios
+          .post("/orders.json", order)
+          .then((res) => {
+            this.setState({ loading: false });
+            this.props.history.push("/");
+          })
+          .catch((error) => {
+            this.setState({ loading: false });
+          });
+        this.setState({ purchasing: false });
+        this.setState({ loading: true });
+      }
+      this.props.match.path = "/";
+    }
   };
 
   checkValidity = (value, rules) => {
     let isValid = false;
+
+    if (!rules) {
+      return true;
+    }
 
     if (rules.required) {
       isValid = value.trim() !== "";
@@ -121,14 +134,19 @@ class ContactData extends Component {
 
     updatedFormElement.value = event.target.value;
     updatedOrderForm[inputIdentifier] = updatedFormElement;
+    updatedFormElement.touched = true;
+    let formIsValid = true;
+
     updatedFormElement.valid = this.checkValidity(
       updatedFormElement.value,
       updatedFormElement.validation
     );
 
-    console.log(updatedFormElement);
-    this.setState({ orderForm: updatedOrderForm });
-    this;
+    for (let inputIdentifiers in updatedOrderForm) {
+      formIsValid = updatedOrderForm[inputIdentifiers].valid && formIsValid;
+    }
+
+    this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid });
   };
 
   render() {
@@ -140,6 +158,7 @@ class ContactData extends Component {
         config: this.state.orderForm[key],
       });
     }
+
     let form = (
       <form onSubmit={this.orderHandler}>
         {formElementsArray.map((element) => (
@@ -148,10 +167,15 @@ class ContactData extends Component {
             elementType={element.config.elementType}
             elementConfig={element.config.elementConfig}
             value={element.config.value}
+            touched={element.config.touched}
+            invalid={!element.config.valid}
+            shouldValidate={element.config.validation}
             changed={(event) => this.InputChangeHandler(event, element.id)}
           />
         ))}
-        <Button btnType="Success">ORDER</Button>
+        <Button btnType="Success" disabled={!this.state.formIsValid}>
+          ORDER
+        </Button>
       </form>
     );
 

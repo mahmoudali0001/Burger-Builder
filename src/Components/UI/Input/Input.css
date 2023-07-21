@@ -4,9 +4,7 @@
   align-items: flex-start;
 }
 
-.Input input,
-.Input textarea,
-.Input select {
+.InputElement {
   width: 100%;
   box-sizing: border-box;
   resize: none;
@@ -14,6 +12,11 @@
   font-size: 15px;
   border: 1px solid #bfbfbf;
   border-radius: 3px;
+}
+
+.Invalid {
+  border: 1px solid red;
+  background-color: #ff6a5f4d;
 }
 
 .Input label {
